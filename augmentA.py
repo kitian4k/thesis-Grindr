@@ -7,18 +7,23 @@ import json
 
 if __name__ == '__main__':
     start = time.time()
-    if len(sys.argv) > 1:
-        data = sys.argv[1]
-        categories_keywords_dict = json.loads(data)
-    else:
-        print("No data provided.")
+    if len(sys.argv) < 2:
+        print("Error: Missing JSON data argument")
+        exit()
+
+    json_string = sys.argv[1]
+    data = json.loads(json_string)
+
+    categories_keywords_dict = data['category_data']
+    folder_path = data['folder_path']
+
     #categories_keywords_dict1 = {
        # 'AI': ['Artificial', 'Intelligence'],
       #  'Automata': ['finite', 'state', 'machines'],  
      #'DT': ['game', 'theory']
     #}
  
-    input='input'#file path here
+    input = folder_path#file path here
     output='output'#and here
     print(categories_keywords_dict)
   

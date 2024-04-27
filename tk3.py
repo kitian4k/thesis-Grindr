@@ -65,7 +65,14 @@ def save_to_backup(): # connect to
         keyword_start_index += num_keywords
 
     #print(category_data)
-    subprocess.run(["python3", "augmentA.py", json.dumps(category_data)])
+    folder_path = file_path_var.get()
+    data_to_send = {
+        "category_data": category_data,
+        "folder_path": file_path_var.get()
+    }
+
+    print(folder_path)
+    subprocess.run(["python3", "augmentA.py", json.dumps(data_to_send)])
 
 
 def clear_existing_textboxes():
@@ -96,9 +103,6 @@ def update_category_dropdowns():
         keyword_options = [1, 2, 3, 4, 5]
         ttk.Combobox(frame, textvariable=keyword_vars[frame],
                      values=keyword_options).pack()
-
-
-
 
 
 # --- Main Program ---
