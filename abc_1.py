@@ -1,11 +1,17 @@
+
 import os
 import threading
 import concurrent.futures
 from multiprocessing import Pool  # Import for multiprocessing
 import re
-from docx import Document  # Assuming DOCX support is desired
+#from docx import Document  # Assuming DOCX support is desired
 from pdfminer.high_level import extract_text  # Import for PDF text extraction
 import time
+
+# Additional libraries for new file types
+#import openpyxl  # For basic XLSX handling (consider pandas for structured data)
+#from pptx import Presentation  # For PPTX presentations (install with: pip install python-pptx)
+
 try:
     from docx import Document
 except ImportError:
@@ -45,6 +51,10 @@ def categorize_file(file_path, compiled_keywords):
             except Exception as e:
                 print(f"Error processing DOCX '{file_path}': {e}")
                 return file_path, 'Uncategorized (Error)'
+        elif file_path.endswith('.txt'):
+            with open(file_path, 'r') as f:
+                text = f.read()
+            return file_path, categorize_text_chunk(text, compiled_keywords)
         else:
             print(f"Unsupported file type: {file_path}")
             return None, 'Unsupported File Type'
@@ -78,18 +88,3 @@ def chunks(lst, chunk_size):
     for i in range(0, len(lst), chunk_size):
         yield lst[i:i + chunk_size]
 
-
-# ... (rest of the code for threaded_worker, chunks remains unchanged)
-
-if __name__ == '__main__':
-    start = time.time()
-    categories_keywords_dict = {
-        'Automata': ['finite', 'state', 'machines'],
-        'AI': ['Artificial', 'Intelligence'],
-        'DT': ['game', 'theory']
-    }
-
-    compiled_keywords = compile_keywords(categories_keywords_dict)
-    multi_process_categorizer('input', 'output', compiled_keywords, num_processes=8)  # Adjust processes as needed
-    end = time.time()
-    print(f"Categorization completed in {end - start:.2f} seconds")
